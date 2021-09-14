@@ -1,13 +1,13 @@
 import React from 'react';
 import {View} from 'react-native';
-import * as yup from 'yup';
 import {useForm} from 'react-hook-form';
+import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 
-import Input from './input/input';
+import Input from '../input/input';
 import {Container, Title, SubmitButton, TextButton} from './styles';
 
-const createUserFormSchema = yup.object().shape({
+const editUserFormSchema = yup.object().shape({
   name: yup.string().required('Nome obrigatório'),
   email: yup.string().required('E-mail obrigatório').email('E-mail inválido'),
   password: yup
@@ -19,9 +19,9 @@ const createUserFormSchema = yup.object().shape({
     .oneOf([null, yup.ref('password')], 'As senhas precisam ser iguais'),
 });
 
-const SignUpForm = () => {
+const EditForm = ({editable = false}) => {
   const {control, handleSubmit, formState} = useForm({
-    resolver: yupResolver(createUserFormSchema),
+    resolver: yupResolver(editUserFormSchema),
   });
 
   const {errors} = formState;
@@ -29,10 +29,9 @@ const SignUpForm = () => {
   const onSubmit = data => {
     console.log(data);
   };
-
   return (
     <Container>
-      <Title>Cadastrar</Title>
+      <Title>Editar</Title>
 
       <View>
         <Input
@@ -40,12 +39,14 @@ const SignUpForm = () => {
           control={control}
           placeholder="Nome"
           error={errors.name}
+          editable={editable}
         />
         <Input
           name="email"
           control={control}
           placeholder="E-mail"
           error={errors.email}
+          editable={editable}
         />
         <Input
           name="password"
@@ -53,6 +54,7 @@ const SignUpForm = () => {
           placeholder="Senha"
           secureTextEntry
           error={errors.password}
+          editable={editable}
         />
         <Input
           name="password_confirmation"
@@ -60,14 +62,15 @@ const SignUpForm = () => {
           placeholder="Confirmar senha"
           secureTextEntry
           error={errors.password_confirmation}
+          editable={editable}
         />
       </View>
 
-      <SubmitButton onPress={handleSubmit(onSubmit)}>
-        <TextButton>Cadastrar</TextButton>
+      <SubmitButton onPress={handleSubmit(onSubmit)} editable={editable}>
+        <TextButton editable={editable}>Alterar</TextButton>
       </SubmitButton>
     </Container>
   );
 };
 
-export default SignUpForm;
+export default EditForm;

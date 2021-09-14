@@ -5,3 +5,27 @@ export const Container = styled.View`
   background-color: #202a36;
   padding: 0 16px;
 `;
+
+export const FlatBrand = styled.TouchableOpacity`
+  padding: 4px 8px;
+`;
+
+export const TextButtonBrand = styled.Text`
+  color: ${props => (props.active ? '#f2f2f2' : '#2e3a48')};
+  font-family: 'Roboto-Medium';
+  font-size: 18px;
+`;
+
+export const InfoAndFilter = styled.View`
+  margin: 16px 0 -10px;
+
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const FoundItems = styled.Text`
+  color: #2e3a48;
+  font-family: 'Roboto-Medium';
+  font-size: 18px;
+`;
