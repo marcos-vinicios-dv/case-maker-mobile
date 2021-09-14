@@ -2,6 +2,7 @@
 import React from 'react';
 import {FlatList, View} from 'react-native';
 import CardProduct from '../../components/CardProduct';
+import DropdownScreen from '../../components/DropMenu';
 
 import Header from '../../components/Header';
 
@@ -43,6 +44,7 @@ const Home = props => {
         </View>
         <InfoAndFilter>
           <FoundItems>3 Produtos</FoundItems>
+          <DropdownScreen />
         </InfoAndFilter>
         <CardProduct />
       </Container>

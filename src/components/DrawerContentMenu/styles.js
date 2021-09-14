@@ -34,6 +34,7 @@ export const ButtonNavigation = styled.TouchableOpacity`
 
 export const TextButtonNavigation = styled.Text`
   font-size: 18px;
-  font-family: 'Roboto-Bold';
+  font-family: 'Roboto-Medium';
   margin-left: 8px;
+  color: ${props => (props.active ? '#00d172' : '#f2f2f2')};
 `;

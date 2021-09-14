@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View} from 'react-native';
 import * as yup from 'yup';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 
+import api from '../../services/api';
 import Input from './input/input';
 import {Container, Title, SubmitButton, TextButton} from './styles';
 
@@ -19,15 +20,27 @@ const createUserFormSchema = yup.object().shape({
     .oneOf([null, yup.ref('password')], 'As senhas precisam ser iguais'),
 });
 
-const SignUpForm = () => {
+const SignUpForm = ({onSetSignUp}) => {
+  const [isLoading, setIsLoading] = useState(false);
   const {control, handleSubmit, formState} = useForm({
     resolver: yupResolver(createUserFormSchema),
   });
-
   const {errors} = formState;
 
-  const onSubmit = data => {
-    console.log(data);
+  const onSubmit = async ({email, name, password}) => {
+    try {
+      setIsLoading(true);
+
+      await api.post('usuarios/registrar', {
+        email,
+        nome: name,
+        password,
+      });
+      setIsLoading(false);
+      onSetSignUp(false);
+    } catch (e) {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -64,7 +77,7 @@ const SignUpForm = () => {
       </View>
 
       <SubmitButton onPress={handleSubmit(onSubmit)}>
-        <TextButton>Cadastrar</TextButton>
+        <TextButton>{isLoading ? 'Cadastrando...' : 'Cadastrar'}</TextButton>
       </SubmitButton>
     </Container>
   );

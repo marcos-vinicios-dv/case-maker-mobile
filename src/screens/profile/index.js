@@ -1,8 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState} from 'react';
 import {View} from 'react-native';
-import Header from '../../components/Header';
+import {useDispatch, useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 
+import Header from '../../components/Header';
 import {
   NameUser,
   EmailUser,
@@ -14,9 +16,19 @@ import {
 } from './styles';
 import ProfileImage from '../../assets/images/profile.png';
 import EditForm from '../../components/forms/EditForm';
+import {logout} from '../../store/modules/user/actions';
 
 const Profile = props => {
-  const active = true;
+  const [isEditable, setIsEditable] = useState(false);
+  const user = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  function handleLogout() {
+    dispatch(logout());
+    navigation.navigate('Auth');
+  }
+
   return (
     <>
       <Header {...props} />
@@ -24,21 +36,23 @@ const Profile = props => {
         <View style={{alignItems: 'center'}}>
           <Image source={ProfileImage} />
 
-          <NameUser>Marcos Vinicios Teixeira</NameUser>
-          <EmailUser>marquinpray@gmial.com</EmailUser>
+          <NameUser>{user.nome}</NameUser>
+          <EmailUser>{user.email}</EmailUser>
 
           <ContainerButtons>
-            <Button active={!active}>
-              <ButtonText active={!active}>
-                {active ? 'Editar' : 'Cancelar'}
+            <Button
+              active={isEditable}
+              onPress={() => setIsEditable(!isEditable)}>
+              <ButtonText active={isEditable}>
+                {isEditable ? 'Cancelar' : 'Editar'}
               </ButtonText>
             </Button>
-            <Button active={active}>
-              <ButtonText active={active}>Sair</ButtonText>
+            <Button active={!isEditable} onPress={handleLogout}>
+              <ButtonText active={!isEditable}>Sair</ButtonText>
             </Button>
           </ContainerButtons>
 
-          <EditForm editable={!active} />
+          <EditForm editable={isEditable} />
         </View>
       </Container>
     </>
