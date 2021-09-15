@@ -7,7 +7,6 @@ const Input = ({control, name, error, ...rest}) => {
   const [focused, setFocused] = useState(false);
   const {field} = useController({
     control,
-    defaultValue: '',
     name,
   });
 

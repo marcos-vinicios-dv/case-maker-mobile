@@ -40,9 +40,9 @@ const DrawerMenu = props => {
         <IconCart
           name="cart"
           size={24}
-          color={props.state.index === 3 ? '#00d172' : '#f2f2f2'}
+          color={props.state.index === 2 ? '#00d172' : '#f2f2f2'}
         />
-        <TextButtonNavigation active={props.state.index === 3}>
+        <TextButtonNavigation active={props.state.index === 2}>
           Carrinho
         </TextButtonNavigation>
       </ButtonNavigation>

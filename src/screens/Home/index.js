@@ -1,10 +1,10 @@
-/* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {FlatList, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, FlatList, View} from 'react-native';
+
 import CardProduct from '../../components/CardProduct';
 import DropdownScreen from '../../components/DropMenu';
-
 import Header from '../../components/Header';
+import api from '../../services/api';
 
 import {PageTitle} from '../../styles/commonStyles';
 import {
@@ -17,8 +17,71 @@ import {
 
 const brands = ['Todas', 'Thermaltake', 'Cougar', 'Aigo'];
 
+async function getProducts() {
+  const {categoria} = (await api.get('categorias/Padrao')).data;
+
+  const promises = categoria.produtos.map(async product => {
+    const data = (await api.get(`avaliacoes?produto=${product._id}`)).data;
+
+    return {
+      ...product,
+      avaliacao: data.avaliacoes[0]?.pontuacao ?? 0,
+      preco_formatado: product.preco.toFixed(2).split('.'),
+    };
+  });
+
+  const formattingProducts = await Promise.all(promises);
+
+  return formattingProducts;
+}
+
+const orders = (arr, by) => {
+  const order = {
+    'Menor Preço': arr.sort((a, b) => {
+      return b.preco - a.preco;
+    }),
+    'Maior Preço': arr.sort((a, b) => {
+      return a.preco - b.preco;
+    }),
+  };
+
+  return order[by];
+};
+
 const Home = props => {
-  const brand = 'Todas';
+  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [brand, setBrand] = useState('Todas');
+  const [orderBy, setOrderBy] = useState('Ordenar');
+  const [productList, setProductList] = useState([]);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      setProductList(await getProducts());
+      setLoadingProducts(false);
+    };
+    loadProducts();
+  }, []);
+
+  useEffect(() => {
+    async function filterProducts() {
+      const defaultList = await getProducts();
+      let productListFiltered = defaultList;
+
+      if (brand !== 'Todas') {
+        productListFiltered = defaultList.filter(
+          product => product.marca === brand,
+        );
+      }
+
+      if (orderBy !== 'Ordenar') {
+        productListFiltered = orders(productListFiltered, orderBy);
+      }
+
+      setProductList(productListFiltered);
+    }
+    filterProducts();
+  }, [brand, orderBy]);
+
   return (
     <>
       <Header {...props} />
@@ -27,13 +90,14 @@ const Home = props => {
         <View>
           <FlatList
             keyExtractor={item => item}
-            ItemSeparatorComponent={() => <View style={{width: 16}} />}
             showsHorizontalScrollIndicator={false}
             data={brands}
             horizontal
             renderItem={({item}) => {
               return (
-                <FlatBrand active={brand === item}>
+                <FlatBrand
+                  active={brand === item}
+                  onPress={() => setBrand(item)}>
                   <TextButtonBrand active={brand === item}>
                     {item}
                   </TextButtonBrand>
@@ -43,10 +107,24 @@ const Home = props => {
           />
         </View>
         <InfoAndFilter>
-          <FoundItems>3 Produtos</FoundItems>
-          <DropdownScreen />
+          <FoundItems>{productList.length} Produtos</FoundItems>
+          <DropdownScreen orderBy={orderBy} onSetOrderBy={setOrderBy} />
         </InfoAndFilter>
-        <CardProduct />
+        {loadingProducts ? (
+          <ActivityIndicator
+            size="small"
+            color="#00d172"
+            // eslint-disable-next-line react-native/no-inline-styles
+            style={{marginTop: '50%'}}
+          />
+        ) : (
+          <FlatList
+            data={productList}
+            keyExtractor={item => item._id}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item}) => <CardProduct product={item} />}
+          />
+        )}
       </Container>
     </>
   );

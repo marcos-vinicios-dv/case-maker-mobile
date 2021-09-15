@@ -52,7 +52,7 @@ const Profile = props => {
             </Button>
           </ContainerButtons>
 
-          <EditForm editable={isEditable} />
+          <EditForm editable={isEditable} onSetEditable={setIsEditable} />
         </View>
       </Container>
     </>

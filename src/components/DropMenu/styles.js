@@ -8,7 +8,7 @@ export const Container = styled.View`
 
 export const AnchorText = styled.Text`
   color: #00d172;
-  font-size: 18px;
+  font-size: 16px;
   font-family: 'Roboto-Medium';
 `;
 

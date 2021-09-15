@@ -35,3 +35,9 @@ export const TextButton = styled.Text`
   font-size: 20px;
   color: #f2f2f2;
 `;
+
+export const TextEmptyCart = styled.Text`
+  font-family: 'Roboto-Regular';
+  font-size: 16px;
+  color: #d1d1d1;
+`;

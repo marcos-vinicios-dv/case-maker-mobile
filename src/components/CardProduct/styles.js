@@ -7,7 +7,7 @@ export const CardContainer = styled.View`
   border-radius: 4px;
 
   padding: 20px 16px;
-  margin-top: 16px;
+  margin-bottom: 16px;
 `;
 
 export const ProductImage = styled.Image`
@@ -22,7 +22,7 @@ export const Info = styled.View`
 
 export const ProductTitle = styled.Text`
   font-family: 'Roboto-Regular';
-  font-size: 20px;
+  font-size: 18px;
   color: #f2f2f2;
 `;
 
@@ -69,5 +69,24 @@ export const LabelDisplay = styled.Text`
   font-size: 16px;
   color: #d1d1d1;
 
-  margin: 0 8px;
+  margin: 0 16px;
+`;
+
+export const SwipeableRightContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 20px 16px;
+
+  background-color: #de3636;
+  border-radius: 4px;
+  width: 100%;
+  height: 131px;
+`;
+
+export const TextSwipeable = styled.Text`
+  font-family: 'Roboto-Regular';
+  font-size: 16px;
+  color: #f2f2f2;
+  margin-right: 16px;
 `;

@@ -8,6 +8,8 @@ export const Container = styled.View`
 
 export const FlatBrand = styled.TouchableOpacity`
   padding: 4px 8px;
+
+  margin-right: 16px;
 `;
 
 export const TextButtonBrand = styled.Text`
@@ -17,7 +19,7 @@ export const TextButtonBrand = styled.Text`
 `;
 
 export const InfoAndFilter = styled.View`
-  margin: 16px 0 -10px;
+  margin: 16px 0 8px;
 
   flex-direction: row;
   justify-content: space-between;
