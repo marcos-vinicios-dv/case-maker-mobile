@@ -11,7 +11,7 @@ import Cart from './src/screens/cart';
 import Profile from './src/screens/profile';
 import DrawerMenu from './src/components/DrawerContentMenu/DrawerMenu';
 import store from './src/store';
-import {toastConfig} from './src/components/CustomToast';
+import {toastConfig} from './src/components/ToastCustom/CustomToast';
 
 const Drawer = createDrawerNavigator();
 

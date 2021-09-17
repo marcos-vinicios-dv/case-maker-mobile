@@ -29,6 +29,7 @@ export const ProductTitle = styled.Text`
 export const SubTitle = styled.Text`
   font-family: 'Roboto-Medium';
   color: #3c4856;
+  margin-top: 8px;
 `;
 
 export const ProductPrice = styled.Text`

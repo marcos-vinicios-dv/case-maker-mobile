@@ -32,7 +32,7 @@ const CardProduct = ({isProductInCart = false, product, quantity = 1}) => {
 
   const addProductToCart = () => {
     Toast.show({
-      type: 'success_custom',
+      type: 'my_custom_Success',
       text1: 'Produto adicionado',
       text2: `Gabinete ${product.titulo}`,
       visibilityTime: 1000,

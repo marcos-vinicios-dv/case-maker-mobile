@@ -28,7 +28,7 @@ function* checkProductStock({payload}) {
   } else {
     yield put(addProductToCartFailure(product._id));
     Toast.show({
-      type: 'error_custom',
+      type: 'my_custom_Error',
       text1: 'Quantidade fora de estoque!',
       visibilityTime: 1000,
     });
@@ -49,7 +49,7 @@ function* updateProductQuantity({payload}) {
 
   if (quantityInStock < payload.quantity) {
     Toast.show({
-      type: 'error_custom',
+      type: 'my_custom_Error',
       text1: 'Quantidade fora de estoque!',
       visibilityTime: 1000,
     });
