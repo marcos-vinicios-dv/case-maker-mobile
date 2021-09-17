@@ -9,7 +9,7 @@ export const Container = styled.View`
 export const FlatBrand = styled.TouchableOpacity`
   padding: 4px 8px;
 
-  margin-right: 16px;
+  margin: 0 16px 0 -7px;
 `;
 
 export const TextButtonBrand = styled.Text`
