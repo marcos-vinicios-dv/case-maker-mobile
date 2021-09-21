@@ -1,4 +1,4 @@
-import {DrawerContentScrollView} from '@react-navigation/drawer';
+import { DrawerContentScrollView } from '@react-navigation/drawer';
 import styled from 'styled-components/native';
 
 export const Container = styled(DrawerContentScrollView)`
@@ -25,7 +25,7 @@ export const EmailUser = styled.Text`
 `;
 
 export const ButtonNavigation = styled.TouchableOpacity`
-  padding: 0 8px;
+  padding: 0 20px;
   margin-top: 16px;
 
   flex-direction: row;
@@ -36,5 +36,5 @@ export const TextButtonNavigation = styled.Text`
   font-size: 18px;
   font-family: 'Roboto-Medium';
   margin-left: 8px;
-  color: ${props => (props.active ? '#00d172' : '#f2f2f2')};
+  color: ${(props) => (props.active ? '#00d172' : '#f2f2f2')};
 `;

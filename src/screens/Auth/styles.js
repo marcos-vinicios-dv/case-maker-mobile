@@ -14,7 +14,7 @@ export const Image = styled.Image`
 
 export const ToggleForm = styled.View`
   flex-direction: row;
-  margin-top: 80px;
+  margin: 80px 0 16px;
 `;
 
 export const LabelTouchable = styled.Text`

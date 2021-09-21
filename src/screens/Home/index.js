@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, View} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, View } from 'react-native';
 
 import CardProduct from '../../components/CardProduct';
 import DropdownScreen from '../../components/DropMenu';
 import Header from '../../components/Header';
 import api from '../../services/api';
 
-import {PageTitle} from '../../styles/commonStyles';
+import { PageTitle } from '../../styles/commonStyles';
 import {
   Container,
   FlatBrand,
@@ -18,9 +18,9 @@ import {
 const brands = ['Todas', 'Thermaltake', 'Cougar', 'Aigo'];
 
 async function getProducts() {
-  const {categoria} = (await api.get('categorias/Padrao')).data;
+  const { categoria } = (await api.get('categorias/Padrao')).data;
 
-  const promises = categoria.produtos.map(async product => {
+  const promises = categoria.produtos.map(async (product) => {
     const data = (await api.get(`avaliacoes?produto=${product._id}`)).data;
 
     return {
@@ -37,39 +37,37 @@ async function getProducts() {
 
 const orders = (arr, by) => {
   const order = {
-    'Menor Preço': arr.sort((a, b) => {
-      return b.preco - a.preco;
-    }),
-    'Maior Preço': arr.sort((a, b) => {
-      return a.preco - b.preco;
-    }),
+    'Menor Preço': () => {
+      return arr.sort((a, b) => {
+        if (b.preco > a.preco) return -1;
+        if (b.preco < a.preco) return 1;
+      });
+    },
+    'Maior Preço': () => {
+      return arr.sort((a, b) => {
+        if (b.preco < a.preco) return -1;
+        if (b.preco > a.preco) return 1;
+      });
+    },
   };
-
-  return order[by];
+  return order[by]();
 };
 
-const Home = props => {
+const Home = (props) => {
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [brand, setBrand] = useState('Todas');
   const [orderBy, setOrderBy] = useState('Ordenar');
   const [productList, setProductList] = useState([]);
 
   useEffect(() => {
-    const loadProducts = async () => {
-      setProductList(await getProducts());
-      setLoadingProducts(false);
-    };
-    loadProducts();
-  }, []);
-
-  useEffect(() => {
     async function filterProducts() {
+      setLoadingProducts(true);
       const defaultList = await getProducts();
       let productListFiltered = defaultList;
 
       if (brand !== 'Todas') {
         productListFiltered = defaultList.filter(
-          product => product.marca === brand,
+          (product) => product.marca === brand
         );
       }
 
@@ -78,6 +76,7 @@ const Home = props => {
       }
 
       setProductList(productListFiltered);
+      setLoadingProducts(false);
     }
     filterProducts();
   }, [brand, orderBy]);
@@ -89,15 +88,16 @@ const Home = props => {
         <PageTitle>Presets</PageTitle>
         <View>
           <FlatList
-            keyExtractor={item => item}
+            keyExtractor={(item) => item}
             showsHorizontalScrollIndicator={false}
             data={brands}
             horizontal
-            renderItem={({item}) => {
+            renderItem={({ item }) => {
               return (
                 <FlatBrand
                   active={brand === item}
-                  onPress={() => setBrand(item)}>
+                  onPress={() => setBrand(item)}
+                >
                   <TextButtonBrand active={brand === item}>
                     {item}
                   </TextButtonBrand>
@@ -115,14 +115,14 @@ const Home = props => {
             size="small"
             color="#00d172"
             // eslint-disable-next-line react-native/no-inline-styles
-            style={{marginTop: '50%'}}
+            style={{ marginTop: '50%' }}
           />
         ) : (
           <FlatList
             data={productList}
-            keyExtractor={item => item._id}
+            keyExtractor={(item) => item._id}
             showsVerticalScrollIndicator={false}
-            renderItem={({item}) => <CardProduct product={item} />}
+            renderItem={({ item }) => <CardProduct product={item} />}
           />
         )}
       </Container>

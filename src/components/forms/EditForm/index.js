@@ -1,14 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
-import {useForm} from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import {yupResolver} from '@hookform/resolvers/yup';
-import {useDispatch, useSelector} from 'react-redux';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Input from '../input/input';
-import {Container, Title, SubmitButton, TextButton} from './styles';
-import {updateUser} from '../../../store/modules/user/actions';
+import { Container, Title, SubmitButton, TextButton } from './styles';
+import { updateUser } from '../../../store/modules/user/actions';
 import api from '../../../services/api';
 
 const editUserFormSchema = yup.object().shape({
@@ -23,23 +23,25 @@ const editUserFormSchema = yup.object().shape({
     .oneOf([null, yup.ref('password')], 'As senhas precisam ser iguais'),
 });
 
-const EditForm = ({editable = false, onSetEditable}) => {
-  const user = useSelector(state => state.user);
+const EditForm = ({ editable = false, onSetEditable }) => {
+  const user = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
-  const {control, handleSubmit, formState, setValue} = useForm({
+  const { control, handleSubmit, formState, setValue } = useForm({
     resolver: yupResolver(editUserFormSchema),
   });
 
   useEffect(() => {
     setValue('name', user.nome);
     setValue('email', user.email);
+    setValue('password', '');
+    setValue('password_confirmation', '');
   }, [setValue, user]);
 
-  const {errors} = formState;
+  const { errors } = formState;
 
-  const onSubmit = async ({email, name, password}) => {
+  const onSubmit = async ({ email, name, password }) => {
     try {
       setIsLoading(true);
 
@@ -54,10 +56,10 @@ const EditForm = ({editable = false, onSetEditable}) => {
           headers: {
             Authorization: `CaseMaker ${user.token}`,
           },
-        },
+        }
       );
 
-      const {usuario} = await response.data;
+      const { usuario } = await response.data;
 
       dispatch(updateUser(usuario));
 
@@ -113,7 +115,11 @@ const EditForm = ({editable = false, onSetEditable}) => {
         />
       </View>
 
-      <SubmitButton onPress={handleSubmit(onSubmit)} editable={editable}>
+      <SubmitButton
+        onPress={handleSubmit(onSubmit)}
+        editable={editable}
+        disabled={!editable}
+      >
         <TextButton editable={editable}>
           {isLoading ? 'Alterando...' : 'Alterar'}
         </TextButton>
