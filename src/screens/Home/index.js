@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, View } from 'react-native';
 
@@ -79,6 +80,7 @@ const Home = (props) => {
       setLoadingProducts(false);
     }
     filterProducts();
+    AsyncStorage.removeItem('@caseMaker:messageCart');
   }, [brand, orderBy]);
 
   return (
@@ -114,7 +116,6 @@ const Home = (props) => {
           <ActivityIndicator
             size="small"
             color="#00d172"
-            // eslint-disable-next-line react-native/no-inline-styles
             style={{ marginTop: '50%' }}
           />
         ) : (
@@ -122,7 +123,16 @@ const Home = (props) => {
             data={productList}
             keyExtractor={(item) => item._id}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => <CardProduct product={item} />}
+            renderItem={({ item }) => (
+              <CardProduct
+                onSelect={() =>
+                  props.navigation.navigate('Product', {
+                    product: item,
+                  })
+                }
+                product={item}
+              />
+            )}
           />
         )}
       </Container>

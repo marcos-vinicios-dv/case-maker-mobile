@@ -1,9 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import IconPlus from 'react-native-vector-icons/AntDesign';
 import IconTrash from 'react-native-vector-icons/Ionicons';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Toast from 'react-native-toast-message';
 
@@ -27,7 +27,12 @@ import {
   TextSwipeable,
 } from './styles';
 
-const CardProduct = ({isProductInCart = false, product, quantity = 1}) => {
+const CardProduct = ({
+  isProductInCart = false,
+  product,
+  quantity = 1,
+  onSelect = null,
+}) => {
   const dispatch = useDispatch();
 
   const addProductToCart = () => {
@@ -64,7 +69,7 @@ const CardProduct = ({isProductInCart = false, product, quantity = 1}) => {
   const contentCard = () => {
     return (
       <>
-        <ProductImage source={{uri: product?.Imagem_URL}} />
+        <ProductImage source={{ uri: product?.Imagem_URL }} />
         <Info>
           <ProductTitle>{product?.titulo}</ProductTitle>
           <SubTitle>
@@ -73,13 +78,13 @@ const CardProduct = ({isProductInCart = false, product, quantity = 1}) => {
           <ProductPrice>
             {isProductInCart ? (
               <>
-                R$ <Text style={{fontSize: 20}}>{subTotal[0]}</Text>,
+                R$ <Text style={{ fontSize: 20 }}>{subTotal[0]}</Text>,
                 {subTotal[1]}
               </>
             ) : (
               <>
                 R${' '}
-                <Text style={{fontSize: 20}}>
+                <Text style={{ fontSize: 20 }}>
                   {product?.preco_formatado[0]}
                 </Text>
                 ,{product?.preco_formatado[1]}
@@ -113,13 +118,14 @@ const CardProduct = ({isProductInCart = false, product, quantity = 1}) => {
     return (
       <Swipeable
         renderRightActions={getRightContent}
-        onSwipeableRightOpen={removeProduct}>
-        <CardContainer>{contentCard()}</CardContainer>
+        onSwipeableRightOpen={removeProduct}
+      >
+        <CardContainer activeOpacity={1}>{contentCard()}</CardContainer>
       </Swipeable>
     );
   }
 
-  return <CardContainer>{contentCard()}</CardContainer>;
+  return <CardContainer onPress={onSelect}>{contentCard()}</CardContainer>;
 };
 
 export default CardProduct;
