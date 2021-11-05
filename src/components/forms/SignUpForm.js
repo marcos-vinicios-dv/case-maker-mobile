@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
-import {View} from 'react-native';
+import React, { useState } from 'react';
+import { View } from 'react-native';
 import * as yup from 'yup';
-import {useForm} from 'react-hook-form';
-import {yupResolver} from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import api from '../../services/api';
 import Input from './input/input';
-import {Container, Title, SubmitButton, TextButton} from './styles';
+import { Container, Title, SubmitButton, TextButton } from './styles';
 
 const createUserFormSchema = yup.object().shape({
   name: yup.string().required('Nome obrigatório'),
@@ -20,14 +20,14 @@ const createUserFormSchema = yup.object().shape({
     .oneOf([null, yup.ref('password')], 'As senhas precisam ser iguais'),
 });
 
-const SignUpForm = ({onSetSignUp}) => {
+const SignUpForm = ({ onSetSignUp }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const {control, handleSubmit, formState} = useForm({
+  const { control, handleSubmit, formState, setError } = useForm({
     resolver: yupResolver(createUserFormSchema),
   });
-  const {errors} = formState;
+  const { errors } = formState;
 
-  const onSubmit = async ({email, name, password}) => {
+  const onSubmit = async ({ email, name, password }) => {
     try {
       setIsLoading(true);
 
@@ -39,6 +39,17 @@ const SignUpForm = ({onSetSignUp}) => {
       setIsLoading(false);
       onSetSignUp(false);
     } catch (e) {
+      if (e.response.status === 500) {
+        if (e.response.data.errors.email.message === 'Email já cadastrado!') {
+          setError('email', {
+            type: 'validate',
+            message: e.response.data.errors.email.message,
+          });
+        } else {
+          console.log(e);
+        }
+      }
+    } finally {
       setIsLoading(false);
     }
   };

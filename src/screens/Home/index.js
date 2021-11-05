@@ -22,7 +22,7 @@ async function getProducts() {
   const { categoria } = (await api.get('categorias/Padrao')).data;
 
   const promises = categoria.produtos.map(async (product) => {
-    const data = (await api.get(`avaliacoes?produto=${product._id}`)).data;
+    const data = (await api.get(`produtos/${product._id}/avaliacoes`)).data;
 
     return {
       ...product,

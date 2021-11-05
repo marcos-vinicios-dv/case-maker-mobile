@@ -1,8 +1,8 @@
 import React from 'react';
-import {Image, TouchableOpacity} from 'react-native';
+import { Image, TouchableOpacity } from 'react-native';
 import IconHome from 'react-native-vector-icons/MaterialIcons';
 import IconCart from 'react-native-vector-icons/Ionicons';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import ProfileImage from '../../assets/images/profile.png';
 
@@ -13,15 +13,20 @@ import {
   ProfileContainer,
   EmailUser,
   NameUser,
+  ImageUser,
 } from './styles';
 
-const DrawerMenu = props => {
-  const user = useSelector(state => state.user);
+const DrawerMenu = (props) => {
+  const user = useSelector((state) => state.user);
   return (
     <Container {...props}>
       <ProfileContainer>
         <TouchableOpacity onPress={() => props.navigation.navigate('Profile')}>
-          <Image source={ProfileImage} />
+          <ImageUser
+            source={{
+              uri: user.imageUrl,
+            }}
+          />
         </TouchableOpacity>
         <NameUser>{user.nome}</NameUser>
         <EmailUser>{user.email}</EmailUser>

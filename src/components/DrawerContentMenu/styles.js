@@ -38,3 +38,10 @@ export const TextButtonNavigation = styled.Text`
   margin-left: 8px;
   color: ${(props) => (props.active ? '#00d172' : '#f2f2f2')};
 `;
+
+export const ImageUser = styled.Image`
+  width: 80px;
+  height: 80px;
+
+  border-radius: 40px;
+`;

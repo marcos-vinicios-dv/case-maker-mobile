@@ -28,7 +28,7 @@ const EditForm = ({ editable = false, onSetEditable }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
-  const { control, handleSubmit, formState, setValue } = useForm({
+  const { control, handleSubmit, formState, setValue, setError } = useForm({
     resolver: yupResolver(editUserFormSchema),
   });
 
@@ -64,15 +64,25 @@ const EditForm = ({ editable = false, onSetEditable }) => {
       dispatch(updateUser(usuario));
 
       const serialUser = JSON.stringify({
-        email: usuario.email,
-        nome: usuario.nome,
-        token: usuario.token,
+        email: data.usuario.email,
+        nome: data.usuario.nome,
+        token: data.usuario.token,
+        _id: data.usuario._id,
+        imageUrl: data.usuario.imageUrl,
       });
 
       AsyncStorage.setItem('@caseMaker:user', serialUser);
       onSetEditable(false);
     } catch (e) {
-      console.warn(e);
+      if (e.response.status === 500) {
+        if (e.response.data.errors.email.message === 'Email já cadastrado!') {
+          setError('email', {
+            type: 'validate',
+            message: e.response.data.errors.email.message,
+          });
+        }
+      }
+      console.log(e);
     } finally {
       setIsLoading(false);
     }
